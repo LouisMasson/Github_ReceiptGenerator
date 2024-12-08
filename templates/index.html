@@ -63,9 +63,14 @@
 
                         <div class="receipt-footer">
                             <div class="divider">********************************</div>
-                            <button id="download-pdf" class="btn btn-secondary">
-                                <i class="fa fa-download"></i> Download PDF
-                            </button>
+                            <div class="button-group">
+                                <button id="download-pdf" class="btn btn-secondary">
+                                    <i class="fa fa-download"></i> Download PDF
+                                </button>
+                                <button id="share-receipt" class="btn btn-secondary">
+                                    <i class="fa fa-share-alt"></i> Share
+                                </button>
+                            </div>
                             <p>Generated with gitreceipt.patronusguardian.org</p>
                             <p>Thanks for visiting!</p>
                             <p>Made by Louis with Love ❤️</p>
@@ -76,6 +81,10 @@
         </main>
     </div>
 
+    <script>
+        // Pass shared data to JavaScript if available
+        var sharedData = {{ shared_data|tojson|safe if shared_data else 'null' }};
+    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

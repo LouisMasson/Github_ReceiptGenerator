@@ -1,9 +1,13 @@
 import os
-from flask import Flask, render_template, jsonify, request, send_file
+import uuid
+from flask import Flask, render_template, jsonify, request, send_file, redirect, url_for
 from github_api import get_github_metrics
 import requests_cache
 from weasyprint import HTML
 from io import BytesIO
+
+# Store shared receipts in memory (in production this should be in a database)
+shared_receipts = {}
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "github-receipt-secret")
@@ -59,6 +63,25 @@ def export_pdf(username):
     except Exception as e:
         app.logger.error(f"Export PDF error for user {username}: {str(e)}")
         return jsonify({"error": str(e)}), 400
+
+@app.route('/share/<username>')
+def create_share(username):
+    try:
+        # Get GitHub metrics
+        metrics = get_github_metrics(username)
+        # Generate unique share ID
+        share_id = str(uuid.uuid4())
+        # Store metrics
+        shared_receipts[share_id] = metrics
+        return jsonify({"share_url": f"/s/{share_id}"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/s/<share_id>')
+def view_shared(share_id):
+    if share_id not in shared_receipts:
+        return redirect(url_for('index'))
+    return render_template('index.html', shared_data=shared_receipts[share_id])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
