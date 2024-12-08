@@ -12,4 +12,5 @@ dependencies = [
     "requests-cache>=1.2.1",
     "pdfkit>=1.0.0",
     "weasyprint>=63.0",
+    "gunicorn>=23.0.0",
 ]
