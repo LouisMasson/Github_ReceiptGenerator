@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Copy to clipboard
             await navigator.clipboard.writeText(shareUrl);
-            showNotification('✅ Share link copied to clipboard!', 'success');
+            showNotification('Share link copied to clipboard! Ready to share your GitHub stats!', 'success');
         } catch (error) {
             showNotification(`Error sharing receipt: ${error.message}`, 'error');
         } finally {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
             
-            showNotification('✅ PDF downloaded successfully!', 'success');
+            showNotification('PDF downloaded successfully! Your receipt is ready!', 'success');
         } catch (error) {
             showNotification(`Error downloading PDF: ${error.message}`, 'error');
         } finally {
@@ -82,21 +82,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function showNotification(message, type = '') {
+        // Remove any existing notifications
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+            document.body.removeChild(existingNotification);
+        }
+
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
-        notification.textContent = message;
+        
+        // Add emoji based on notification type
+        const emoji = type === 'success' ? '✨ ' : type === 'error' ? '❌ ' : '💡 ';
+        notification.textContent = emoji + message;
+        
         document.body.appendChild(notification);
         
+        // Fade in
         setTimeout(() => {
             notification.classList.add('show');
-        }, 100);
+        }, 50);
         
+        // Increase display duration to 8 seconds
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => {
-                document.body.removeChild(notification);
+                if (notification.parentNode === document.body) {
+                    document.body.removeChild(notification);
+                }
             }, 300);
-        }, 5000);
+        }, 8000);
     }
 
     function updateReceipt(data) {
@@ -138,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const data = await response.json();
             updateReceipt(data);
-            showNotification('Receipt generated successfully!', 'success');
+            showNotification('Receipt generated successfully! Check out your GitHub stats!', 'success');
         } catch (error) {
             showNotification(`Error: ${error.message}`, 'error');
         } finally {
