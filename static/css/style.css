@@ -1,30 +1,189 @@
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=VT323&display=swap');
 
-body {
-    background-color: #f5f5f5;
-    font-family: 'VT323', monospace;
+:root {
+  /* Light theme */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --muted-foreground: #475569;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --receipt-bg: #ffffff;
+  --receipt-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  --receipt-lines: rgba(0,0,0,0.02);
 }
 
+[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #ffffff;
+  --muted: #64748b;
+  --muted-foreground: #94a3b8;
+  --accent: #1e293b;
+  --accent-foreground: #ffffff;
+  --border: #1e293b;
+  --input: #1e293b;
+  --primary: #ffffff;
+  --primary-foreground: #0f172a;
+  --receipt-bg: #1e293b;
+  --receipt-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  --receipt-lines: rgba(255,255,255,0.03);
+}
+
+/* Base styles */
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme toggle */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem;
+    border-radius: 9999px;
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--accent-foreground);
+    color: var(--accent);
+}
+
+/* Title and subtitle */
 .title {
+    font-family: 'VT323', monospace;
     font-size: 2.5rem;
     margin-top: 2rem;
+    color: var(--foreground);
 }
 
 .subtitle {
-    color: #666;
+    color: var(--muted-foreground);
+    margin-bottom: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Input and button styles */
+.input-group {
+    display: flex;
+    gap: 0.5rem;
     margin-bottom: 2rem;
 }
 
+.input-group input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--input);
+    color: var(--foreground);
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-primary {
+/* Notification */
+.notification {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    background: var(--accent);
+    color: var(--accent-foreground);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--receipt-shadow);
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.notification.error {
+    background: #ef4444;
+    color: white;
+}
+
+/* Receipt update animation */
+.receipt-container.updating {
+    opacity: 0.7;
+    transform: scale(0.99);
+    transition: all 0.3s ease;
+}
+
+/* Content layout */
+.content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.receipt-wrapper {
+    margin: 2rem auto;
+}
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border: none;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Receipt container */
 .receipt-container {
-    background-color: white;
+    background-color: var(--receipt-bg);
     padding: 2rem;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 0.75rem;
+    box-shadow: var(--receipt-shadow);
     max-width: 400px;
     margin: 0 auto;
     position: relative;
     font-size: 1.2rem;
     line-height: 1.4;
+    font-family: 'VT323', monospace;
+    transition: all 0.3s ease;
+    animation: slideIn 0.3s ease;
 }
 
 .receipt-container::before {
@@ -36,14 +195,16 @@ body {
     bottom: 0;
     background: repeating-linear-gradient(
         0deg,
-        rgba(0,0,0,0.02) 0px,
-        rgba(0,0,0,0.02) 1px,
+        var(--receipt-lines) 0px,
+        var(--receipt-lines) 1px,
         transparent 1px,
         transparent 2px
     );
     pointer-events: none;
+    border-radius: 0.75rem;
 }
 
+/* Receipt sections */
 .receipt-header {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -52,19 +213,21 @@ body {
 .receipt-header h2 {
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
+    font-family: 'VT323', monospace;
 }
 
 .divider {
-    font-family: monospace;
+    font-family: 'VT323', monospace;
     text-align: center;
     margin: 1rem 0;
-    color: #666;
+    color: var(--muted);
 }
 
 .metrics-section p,
 .activity-section p {
     margin: 0.5rem 0;
-    font-family: monospace;
+    font-family: 'VT323', monospace;
+    color: var(--foreground);
 }
 
 .languages-section {
@@ -74,18 +237,27 @@ body {
 .receipt-footer {
     text-align: center;
     margin-top: 2rem;
-    color: #666;
+    color: var(--muted);
 }
 
 .receipt-date {
-    color: #666;
+    color: var(--muted);
     font-size: 0.9rem;
 }
 
-#receipt.d-none {
-    display: none;
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
+/* Print styles */
 @media print {
     body {
         background: white;
@@ -102,7 +274,7 @@ body {
         padding: 0;
     }
     
-    .input-group {
+    .input-group, .theme-toggle {
         display: none;
     }
 }

@@ -2,7 +2,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const generateBtn = document.getElementById('generate');
     const usernameInput = document.getElementById('username');
     const receiptElement = document.getElementById('receipt');
+    const themeToggle = document.getElementById('theme-toggle');
+    
+    // Theme management
+    const getTheme = () => localStorage.getItem('theme') || 'light';
+    const setTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeToggle.innerHTML = theme === 'dark' ? '<i class="fa fa-sun-o"></i>' : '<i class="fa fa-moon-o"></i>';
+    };
 
+    // Initialize theme
+    setTheme(getTheme());
+
+    // Theme toggle handler
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = getTheme();
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        setTheme(newTheme);
+    });
+
+    // Receipt generation
     generateBtn.addEventListener('click', generateReceipt);
     usernameInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -13,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function generateReceipt() {
         const username = usernameInput.value.trim();
         if (!username) {
-            alert('Please enter a GitHub username');
+            showNotification('Please enter a GitHub username');
             return;
         }
 
@@ -30,31 +50,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
             updateReceipt(data);
             receiptElement.classList.remove('d-none');
+            
+            // Smooth scroll to receipt
+            receiptElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } catch (error) {
-            alert(`Error: ${error.message}`);
+            showNotification(`Error: ${error.message}`, 'error');
         } finally {
             generateBtn.disabled = false;
             generateBtn.innerHTML = 'Generate';
         }
     }
 
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Trigger animation
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
     function updateReceipt(data) {
-        document.getElementById('receipt-date').textContent = data.generated_at;
-        document.getElementById('gh-username').textContent = data.username;
-        document.getElementById('repos-count').textContent = data.repos_count;
-        document.getElementById('total-stars').textContent = data.total_stars;
-        document.getElementById('total-forks').textContent = data.total_forks;
-        document.getElementById('followers').textContent = data.followers;
-        document.getElementById('following').textContent = data.following;
+        // Add a transition class for smooth updates
+        receiptElement.classList.add('updating');
         
-        // Update languages
-        const languagesHtml = Object.entries(data.top_languages)
-            .map(([lang, count]) => `${lang}: ${count}`)
-            .join('\n');
-        document.getElementById('top-languages').textContent = languagesHtml;
-        
-        document.getElementById('active-day').textContent = data.most_active_day;
-        document.getElementById('commits').textContent = data.thirty_day_commits;
-        document.getElementById('score').textContent = data.contribution_score;
+        setTimeout(() => {
+            document.getElementById('receipt-date').textContent = data.generated_at;
+            document.getElementById('gh-username').textContent = data.username;
+            document.getElementById('repos-count').textContent = data.repos_count;
+            document.getElementById('total-stars').textContent = data.total_stars;
+            document.getElementById('total-forks').textContent = data.total_forks;
+            document.getElementById('followers').textContent = data.followers;
+            document.getElementById('following').textContent = data.following;
+            
+            // Update languages with better formatting
+            const languagesHtml = Object.entries(data.top_languages)
+                .map(([lang, count]) => `${lang.padEnd(15, '.')} ${count}`)
+                .join('\n');
+            document.getElementById('top-languages').textContent = languagesHtml;
+            
+            document.getElementById('active-day').textContent = data.most_active_day;
+            document.getElementById('commits').textContent = data.thirty_day_commits;
+            document.getElementById('score').textContent = data.contribution_score;
+            
+            // Remove transition class
+            receiptElement.classList.remove('updating');
+        }, 300);
     }
 });
