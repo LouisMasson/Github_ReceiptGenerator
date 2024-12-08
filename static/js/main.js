@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Copy to clipboard
             await navigator.clipboard.writeText(shareUrl);
-            showNotification('Share link copied to clipboard!', 'success');
+            showNotification('✅ Share link copied to clipboard!', 'success');
         } catch (error) {
             showNotification(`Error sharing receipt: ${error.message}`, 'error');
         } finally {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
             
-            showNotification('PDF downloaded successfully!', 'success');
+            showNotification('✅ PDF downloaded successfully!', 'success');
         } catch (error) {
             showNotification(`Error downloading PDF: ${error.message}`, 'error');
         } finally {
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.body.removeChild(notification);
             }, 300);
-        }, 3000);
+        }, 5000);
     }
 
     function updateReceipt(data) {
