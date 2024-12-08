@@ -26,21 +26,38 @@ def get_metrics(username):
 @app.route('/api/export-pdf/<username>')
 def export_pdf(username):
     try:
+        # Get GitHub metrics
         metrics = get_github_metrics(username)
+        
+        # Render HTML template
         html_content = render_template('pdf_receipt.html', data=metrics)
-        pdf = HTML(string=html_content).write_pdf()
+        
+        try:
+            # Generate PDF
+            pdf = HTML(string=html_content, base_url=request.host_url).write_pdf()
+        except Exception as pdf_error:
+            app.logger.error(f"PDF generation error: {str(pdf_error)}")
+            return jsonify({"error": "Failed to generate PDF. Please try again."}), 500
         
         # Create BytesIO object
         pdf_buffer = BytesIO(pdf)
         pdf_buffer.seek(0)
         
+        # Set response headers
+        headers = {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': f'attachment; filename=github-receipt-{username}.pdf'
+        }
+        
         return send_file(
             pdf_buffer,
             mimetype='application/pdf',
             as_attachment=True,
-            download_name=f'github-receipt-{username}.pdf'
+            download_name=f'github-receipt-{username}.pdf',
+            max_age=300  # Cache for 5 minutes
         )
     except Exception as e:
+        app.logger.error(f"Export PDF error for user {username}: {str(e)}")
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':

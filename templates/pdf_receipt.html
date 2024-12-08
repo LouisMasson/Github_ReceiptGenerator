@@ -4,29 +4,63 @@
     <meta charset="UTF-8">
     <title>GitHub Receipt - {{ data.username }}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
         body {
-            font-family: monospace;
+            font-family: 'VT323', monospace;
             max-width: 400px;
             margin: 0 auto;
             padding: 20px;
             background-color: white;
+            font-size: 14px;
+            line-height: 1.4;
         }
+        
         .receipt-container {
             text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.02) 0px,
+                rgba(0, 0, 0, 0.02) 1px,
+                transparent 1px,
+                transparent 2px
+            );
         }
+        
         .divider {
             text-align: center;
-            margin: 10px 0;
+            margin: 1rem 0;
             color: #666;
+            font-family: 'VT323', monospace;
         }
+        
         .metrics-section p {
-            margin: 5px 0;
+            margin: 0.5rem 0;
+            text-align: left;
+            font-family: 'VT323', monospace;
+        }
+        
+        .languages-section {
+            margin: 1rem 0;
             text-align: left;
         }
+        
+        .activity-section {
+            text-align: left;
+        }
+        
         .receipt-footer {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 2rem;
             color: #666;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-family: 'VT323', monospace;
         }
     </style>
 </head>
@@ -66,7 +100,7 @@
         
         <div class="receipt-footer">
             <div class="divider">********************************</div>
-            <p>Generatif with gitreceipt.patronusguardian.org</p>
+            <p>Generated with gitreceipt.patronusguardian.org</p>
             <p>Thanks for visiting!</p>
             <p>Made by Louis with Love ❤️</p>
         </div>

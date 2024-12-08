@@ -108,10 +108,36 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('download-pdf').addEventListener('click', async function() {
         if (!currentUsername) return;
         
+        const button = this;
+        const originalText = button.innerHTML;
+        
         try {
-            window.open(`/api/export-pdf/${currentUsername}`, '_blank');
+            button.disabled = true;
+            button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Generating PDF...';
+            
+            const response = await fetch(`/api/export-pdf/${currentUsername}`);
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to generate PDF');
+            }
+            
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `github-receipt-${currentUsername}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            showNotification('PDF downloaded successfully!', 'success');
         } catch (error) {
             showNotification(`Error downloading PDF: ${error.message}`, 'error');
+        } finally {
+            button.disabled = false;
+            button.innerHTML = originalText;
         }
     });
         }, 300);
