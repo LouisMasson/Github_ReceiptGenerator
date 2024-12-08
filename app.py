@@ -6,8 +6,11 @@ import requests_cache
 from weasyprint import HTML
 from io import BytesIO
 
-# Store shared receipts in memory (in production this should be in a database)
-shared_receipts = {}
+# Store shared receipts in memory with timestamps (in production this should be in a database)
+from datetime import datetime, timedelta
+
+shared_receipts = {}  # Format: {share_id: {'data': metrics, 'created_at': timestamp}}
+SHARE_LINK_EXPIRY = timedelta(hours=24)  # Links expire after 24 hours
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "github-receipt-secret")
@@ -67,21 +70,45 @@ def export_pdf(username):
 @app.route('/share/<username>')
 def create_share(username):
     try:
+        # Clean expired shares
+        current_time = datetime.now()
+        expired_shares = [sid for sid, data in shared_receipts.items() 
+                         if current_time - data['created_at'] > SHARE_LINK_EXPIRY]
+        for sid in expired_shares:
+            del shared_receipts[sid]
+
         # Get GitHub metrics
         metrics = get_github_metrics(username)
         # Generate unique share ID
         share_id = str(uuid.uuid4())
-        # Store metrics
-        shared_receipts[share_id] = metrics
-        return jsonify({"share_url": f"/s/{share_id}"})
+        # Store metrics with timestamp
+        shared_receipts[share_id] = {
+            'data': metrics,
+            'created_at': current_time
+        }
+        return jsonify({
+            "share_url": f"/s/{share_id}",
+            "expires_in": "24 hours"
+        })
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        error_message = str(e)
+        if "User not found" in error_message:
+            return jsonify({"error": f"GitHub user '{username}' not found"}), 404
+        return jsonify({"error": error_message}), 400
 
 @app.route('/s/<share_id>')
 def view_shared(share_id):
+    # Check if share exists and hasn't expired
+    current_time = datetime.now()
     if share_id not in shared_receipts:
-        return redirect(url_for('index'))
-    return render_template('index.html', shared_data=shared_receipts[share_id])
+        return render_template('index.html', error_message="This share link is invalid or has expired.")
+    
+    share_data = shared_receipts[share_id]
+    if current_time - share_data['created_at'] > SHARE_LINK_EXPIRY:
+        del shared_receipts[share_id]
+        return render_template('index.html', error_message="This share link has expired.")
+    
+    return render_template('index.html', shared_data=share_data['data'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

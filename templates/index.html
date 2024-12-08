@@ -19,6 +19,12 @@
                 <h1 class="title">GitHub Receipt</h1>
                 <p class="subtitle">Generate a receipt-style summary of your GitHub profile</p>
                 
+                {% if error_message %}
+                <div class="error-message">
+                    {{ error_message }}
+                </div>
+                {% endif %}
+                
                 <div class="input-group">
                     <input type="text" id="username" placeholder="Enter GitHub username">
                     <button class="btn btn-primary" id="generate">Generate</button>
