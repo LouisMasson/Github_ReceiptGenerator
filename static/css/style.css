@@ -169,6 +169,17 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
 }
+.btn-secondary {
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border: none;
+    margin: 1rem 0;
+}
+
+.btn-secondary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
 
 /* Receipt container */
 .receipt-container {

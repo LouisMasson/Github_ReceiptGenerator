@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GitHub Receipt - {{ data.username }}</title>
+    <style>
+        body {
+            font-family: monospace;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+        }
+        .receipt-container {
+            text-align: center;
+        }
+        .divider {
+            text-align: center;
+            margin: 10px 0;
+            color: #666;
+        }
+        .metrics-section p {
+            margin: 5px 0;
+            text-align: left;
+        }
+        .receipt-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <h2>GITHUB METRICS</h2>
+        <p>{{ data.generated_at }}</p>
+        <div class="divider">********************************</div>
+        
+        <p>Username: {{ data.username }}</p>
+        <div class="divider">--------------------------------</div>
+        
+        <div class="metrics-section">
+            <p>Repositories.........: {{ data.repos_count }}</p>
+            <p>Total Stars.........: {{ data.total_stars }}</p>
+            <p>Total Forks.........: {{ data.total_forks }}</p>
+            <p>Followers...........: {{ data.followers }}</p>
+            <p>Following...........: {{ data.following }}</p>
+        </div>
+        
+        <div class="divider">--------------------------------</div>
+        
+        <div class="languages-section">
+            <p>TOP LANGUAGES:</p>
+            {% for lang, count in data.top_languages.items() %}
+            <p>{{ "%-15s"|format(lang) }} {{ count }}</p>
+            {% endfor %}
+        </div>
+        
+        <div class="divider">--------------------------------</div>
+        
+        <div class="activity-section">
+            <p>Most Active Day.....: {{ data.most_active_day }}</p>
+            <p>30-Day Commits......: {{ data.thirty_day_commits }}</p>
+            <p>Contribution Score..: {{ data.contribution_score }}</p>
+        </div>
+        
+        <div class="receipt-footer">
+            <div class="divider">********************************</div>
+            <p>Generated at gitreceipt.com</p>
+            <p>Thanks for visiting!</p>
+        </div>
+    </div>
+</body>
+</html>

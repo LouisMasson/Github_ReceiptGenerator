@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const usernameInput = document.getElementById('username');
     const receiptElement = document.getElementById('receipt');
     const themeToggle = document.getElementById('theme-toggle');
+    let currentUsername = '';
     
     // Theme management
     const getTheme = () => localStorage.getItem('theme') || 'light';
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             updateReceipt(data);
+            currentUsername = username;
             receiptElement.classList.remove('d-none');
             
             // Smooth scroll to receipt
@@ -102,6 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Remove transition class
             receiptElement.classList.remove('updating');
+    // PDF download handler
+    document.getElementById('download-pdf').addEventListener('click', async function() {
+        if (!currentUsername) return;
+        
+        try {
+            window.open(`/api/export-pdf/${currentUsername}`, '_blank');
+        } catch (error) {
+            showNotification(`Error downloading PDF: ${error.message}`, 'error');
+        }
+    });
         }, 300);
     }
 });

@@ -10,4 +10,6 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "requests>=2.32.3",
     "requests-cache>=1.2.1",
+    "pdfkit>=1.0.0",
+    "weasyprint>=63.0",
 ]
