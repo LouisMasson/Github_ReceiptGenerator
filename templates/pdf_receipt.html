@@ -70,7 +70,14 @@
         <p>{{ data.generated_at }}</p>
         <div class="divider">********************************</div>
         
-        <p>Username: {{ data.username }}</p>
+        <div class="profile-section">
+            <p>Username: {{ data.username }}</p>
+            <p>Name: {{ data.name }}</p>
+            <p>Location: {{ data.location }}</p>
+            <p>Company: {{ data.company }}</p>
+            <p>Bio: {{ data.bio }}</p>
+        </div>
+        
         <div class="divider">--------------------------------</div>
         
         <div class="metrics-section">
@@ -79,6 +86,8 @@
             <p>Total Forks.........: {{ data.total_forks }}</p>
             <p>Followers...........: {{ data.followers }}</p>
             <p>Following...........: {{ data.following }}</p>
+            <p>Account Created.....: {{ data.account_created }}</p>
+            <p>Account Age.........: {{ data.account_age_days }} days</p>
         </div>
         
         <div class="divider">--------------------------------</div>
@@ -97,7 +106,23 @@
             <p>30-Day Commits......: {{ data.thirty_day_commits }}</p>
             <p>Contribution Score..: {{ data.contribution_score }}</p>
         </div>
-        
+
+        <div class="divider">--------------------------------</div>
+
+        <div class="repos-section">
+            <p>LATEST REPOSITORIES:</p>
+            {% for repo in data.latest_repos %}
+            <p>{{ "%-15s"|format(repo.name) }} ⭐{{ repo.stars }}</p>
+            {% endfor %}
+
+            <div class="divider">----------</div>
+
+            <p>MOST STARRED REPOSITORIES:</p>
+            {% for repo in data.most_starred_repos %}
+            <p>{{ "%-15s"|format(repo.name) }} ⭐{{ repo.stars }}</p>
+            {% endfor %}
+        </div>
+
         <div class="receipt-footer">
             <div class="divider">********************************</div>
             <p>Generated with gitreceipt.patronusguardian.org</p>

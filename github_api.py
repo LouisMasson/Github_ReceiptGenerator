@@ -43,8 +43,26 @@ def get_github_metrics(username):
                           for event in events)
     most_active_day = day_activity.most_common(1)[0][0] if day_activity else 'N/A'
     
+    # Get latest repositories
+    latest_repos = sorted(repos, key=lambda x: x['created_at'], reverse=True)[:3]
+    latest_repos_info = [{'name': repo['name'], 'stars': repo['stargazers_count']} 
+                        for repo in latest_repos]
+
+    # Get most starred repositories
+    starred_repos = sorted(repos, key=lambda x: x['stargazers_count'], reverse=True)[:3]
+    starred_repos_info = [{'name': repo['name'], 'stars': repo['stargazers_count']} 
+                         for repo in starred_repos]
+
+    # Calculate account age
+    created_at = datetime.strptime(user_data['created_at'], '%Y-%m-%dT%H:%M:%SZ')
+    account_age = (datetime.now() - created_at).days
+
     return {
         'username': username,
+        'name': user_data.get('name', 'N/A'),
+        'bio': user_data.get('bio', 'N/A'),
+        'location': user_data.get('location', 'N/A'),
+        'company': user_data.get('company', 'N/A'),
         'repos_count': user_data['public_repos'],
         'followers': user_data['followers'],
         'following': user_data['following'],
@@ -54,5 +72,9 @@ def get_github_metrics(username):
         'most_active_day': most_active_day,
         'thirty_day_commits': recent_commits,
         'contribution_score': total_stars + total_forks + recent_commits,
+        'latest_repos': latest_repos_info,
+        'most_starred_repos': starred_repos_info,
+        'account_created': created_at.strftime('%Y-%m-%d'),
+        'account_age_days': account_age,
         'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }

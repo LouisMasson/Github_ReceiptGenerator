@@ -133,6 +133,18 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('commits').textContent = data.thirty_day_commits;
         document.getElementById('score').textContent = data.contribution_score;
         document.getElementById('receipt-date').textContent = data.generated_at;
+
+        // Update latest repositories
+        const latestReposHtml = data.latest_repos
+            .map(repo => `<p>${repo.name.padEnd(15, '.')} ⭐${repo.stars}</p>`)
+            .join('');
+        document.getElementById('latest-repos').innerHTML = latestReposHtml;
+
+        // Update most starred repositories
+        const starredReposHtml = data.most_starred_repos
+            .map(repo => `<p>${repo.name.padEnd(15, '.')} ⭐${repo.stars}</p>`)
+            .join('');
+        document.getElementById('starred-repos').innerHTML = starredReposHtml;
     }
 
     // Handle generate button click
