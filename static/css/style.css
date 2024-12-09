@@ -224,6 +224,15 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.btn.success {
+    background: #22c55e;
+    transition: background-color 0.5s ease;
+}
+
+.btn-primary.success {
+    background: #15803d;
+}
 .btn-secondary {
     background: var(--accent);
     color: var(--accent-foreground);
