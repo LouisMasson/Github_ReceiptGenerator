@@ -1,12 +1,8 @@
 # GitHub Receipt Generator 🧾
 
-[![Python Version](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub API](https://img.shields.io/badge/GitHub-API-green.svg)](https://docs.github.com/en/rest)
-
 A sleek web application that generates aesthetic, receipt-style summaries of GitHub profiles. Transform your GitHub activity into a beautifully formatted receipt, complete with comprehensive metrics and a unique thermal printer-inspired design.
 
-![GitHub Receipt Preview](generated-icon.png)
+![GitHub Receipt Preview](Github_receipt.png)
 
 ## ✨ Features 
 
