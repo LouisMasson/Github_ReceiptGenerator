@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             const shareUrl = window.location.origin + data.share_url;
             
-            // Copy to clipboard
+            // Copy to clipboard and show success state
             await navigator.clipboard.writeText(shareUrl);
             button.classList.add('success');
-            setTimeout(() => button.classList.remove('success'), 2000);
+            setTimeout(() => button.classList.remove('success'), 1000);
         } catch (error) {
             showNotification(`Error sharing receipt: ${error.message}`, 'error');
         } finally {
