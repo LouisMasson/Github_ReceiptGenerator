@@ -5,7 +5,7 @@
     <title>GitHub Receipt - {{ data.username }}</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-        
+
         body {
             font-family: 'VT323', monospace;
             max-width: 400px;
@@ -15,7 +15,7 @@
             font-size: 14px;
             line-height: 1.4;
         }
-        
+
         .receipt-container {
             text-align: center;
             padding: 2rem;
@@ -28,35 +28,35 @@
                 transparent 2px
             );
         }
-        
+
         .divider {
             text-align: center;
             margin: 1rem 0;
             color: #666;
             font-family: 'VT323', monospace;
         }
-        
+
         .metrics-section p {
             margin: 0.5rem 0;
             text-align: left;
             font-family: 'VT323', monospace;
         }
-        
+
         .languages-section {
             margin: 1rem 0;
             text-align: left;
         }
-        
+
         .activity-section {
             text-align: left;
         }
-        
+
         .receipt-footer {
             text-align: center;
             margin-top: 2rem;
             color: #666;
         }
-        
+
         h2 {
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
@@ -69,7 +69,7 @@
         <h2>GITHUB METRICS</h2>
         <p>{{ data.generated_at }}</p>
         <div class="divider">********************************</div>
-        
+
         <div class="profile-section">
             <p>Username: {{ data.username }}</p>
             <p>Name: {{ data.name }}</p>
@@ -77,9 +77,9 @@
             <p>Company: {{ data.company }}</p>
             <p>Bio: {{ data.bio }}</p>
         </div>
-        
+
         <div class="divider">--------------------------------</div>
-        
+
         <div class="metrics-section">
             <p>Repositories.........: {{ data.repos_count }}</p>
             <p>Total Stars.........: {{ data.total_stars }}</p>
@@ -89,18 +89,18 @@
             <p>Account Created.....: {{ data.account_created }}</p>
             <p>Account Age.........: {{ data.account_age_days }} days</p>
         </div>
-        
+
         <div class="divider">--------------------------------</div>
-        
+
         <div class="languages-section">
             <p>TOP LANGUAGES:</p>
             {% for lang, count in data.top_languages.items() %}
             <p>{{ "%-15s"|format(lang) }} {{ count }}</p>
             {% endfor %}
         </div>
-        
+
         <div class="divider">--------------------------------</div>
-        
+
         <div class="activity-section">
             <p>Most Active Day.....: {{ data.most_active_day }}</p>
             <p>30-Day Commits......: {{ data.thirty_day_commits }}</p>
@@ -130,5 +130,7 @@
             <p>Made by Louis with Love ❤️</p>
         </div>
     </div>
+
+    <script defer data-domain="gitreceipt.patronusguardian.org" src="https://analytics.patronusguardian.org/js/script.js"></script>
 </body>
 </html>

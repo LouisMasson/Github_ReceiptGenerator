@@ -18,13 +18,13 @@
             <div class="header-section">
                 <h1 class="title">GitHub Receipt</h1>
                 <p class="subtitle">Generate a receipt-style summary of your GitHub profile</p>
-                
+
                 {% if error_message %}
                 <div class="error-message">
                     {{ error_message }}
                 </div>
                 {% endif %}
-                
+
                 <div class="input-group">
                     <input type="text" id="username" placeholder="Enter GitHub username">
                     <button class="btn btn-primary" id="generate">Generate</button>
@@ -43,7 +43,7 @@
                         <div class="receipt-body">
                             <p class="username-line">Username: <span id="gh-username"></span></p>
                             <div class="divider">--------------------------------</div>
-                            
+
                             <div class="metrics-section">
                                 <p>Repositories.........: <span id="repos-count"></span></p>
                                 <p>Total Stars.........: <span id="total-stars"></span></p>
@@ -51,16 +51,16 @@
                                 <p>Followers...........: <span id="followers"></span></p>
                                 <p>Following...........: <span id="following"></span></p>
                             </div>
-                            
+
                             <div class="divider">--------------------------------</div>
-                            
+
                             <div class="languages-section">
                                 <p>TOP LANGUAGES:</p>
                                 <div id="top-languages"></div>
                             </div>
-                            
+
                             <div class="divider">--------------------------------</div>
-                            
+
                             <div class="activity-section">
                                 <p>Most Active Day.....: <span id="active-day"></span></p>
                                 <p>30-Day Commits......: <span id="commits"></span></p>
@@ -72,9 +72,9 @@
                             <div class="repos-section">
                                 <p>LATEST REPOSITORIES:</p>
                                 <div id="latest-repos"></div>
-                                
+
                                 <div class="divider">----------</div>
-                                
+
                                 <p>MOST STARRED REPOSITORIES:</p>
                                 <div id="starred-repos"></div>
                             </div>
@@ -105,5 +105,7 @@
         var sharedData = {{ shared_data|tojson|safe if shared_data else 'null' }};
     </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script defer data-domain="gitreceipt.patronusguardian.org" src="https://analytics.patronusguardian.org/js/script.js"></script>
 </body>
 </html>
